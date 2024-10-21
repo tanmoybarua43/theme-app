@@ -1,24 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import styled, { ThemeProvider } from 'styled-components';
+import { useSelector } from 'react-redux';
+import DarkThemeToggle from './DarkThemeToggle';
+import GlobalStyles from './GlobalStyles';
+
+const themes = {
+  light: {
+    background: '#fff',
+    color: '#000'
+  },
+  dark: {
+    background: '#000',
+    color: '#fff'
+  }
+};
+
+const Container = styled.div`
+  background-color: ${props => props.theme.background};
+  color: ${props => props.theme.color};
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+`;
 
 function App() {
+  // Access the state directly, not through state.theme
+  const darkThemeEnabled = useSelector(state => state.darkTheme);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={darkThemeEnabled ? themes.dark : themes.light}>
+      <GlobalStyles />
+      <Container>
+        <h1>Theme Toggler</h1>
+        <DarkThemeToggle />
+      </Container>
+    </ThemeProvider>
   );
 }
 
